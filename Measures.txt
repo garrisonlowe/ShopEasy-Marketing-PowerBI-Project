@@ -1,0 +1,204 @@
+
+Clicks = SUM( FACT_engagement_data[Clicks] )
+
+--------------------------------------------------------------------------------------------------------
+Conversion Rate = 
+
+VAR TotalVisitors = CALCULATE(COUNT(FACT_customer_journey[JourneyID]), FACT_customer_journey[Action] = "View" )
+VAR TotalPurchases = CALCULATE(COUNT(FACT_customer_journey[JourneyID]), FACT_customer_journey[Action] = "Purchase")
+
+RETURN 
+IF(TotalVisitors = 0, 0, DIVIDE(TotalPurchases, TotalVisitors))
+
+--------------------------------------------------------------------------------------------------------
+Conversion Rate 2023 = 
+
+VAR TotalVisitors = CALCULATE(
+    COUNT(FACT_customer_journey[JourneyID]), 
+    FACT_customer_journey[Action] = "View",
+    YEAR('Calendar'[Date]) = 2023
+)
+VAR TotalPurchases = CALCULATE(
+    COUNT(FACT_customer_journey[JourneyID]), 
+    FACT_customer_journey[Action] = "Purchase",
+    YEAR('Calendar'[Date]) = 2023
+)
+VAR ConversionRate = IF(TotalVisitors = 0, 0, DIVIDE(TotalPurchases, TotalVisitors))
+
+RETURN 
+FORMAT(ConversionRate, "0.0%") 
+--------------------------------------------------------------------------------------------------------
+Conversion Rate 2024 = 
+
+VAR TotalVisitors = CALCULATE(
+    COUNT(FACT_customer_journey[JourneyID]), 
+    FACT_customer_journey[Action] = "View",
+    YEAR('Calendar'[Date]) = 2024
+)
+VAR TotalPurchases = CALCULATE(
+    COUNT(FACT_customer_journey[JourneyID]), 
+    FACT_customer_journey[Action] = "Purchase",
+    YEAR('Calendar'[Date]) = 2024
+)
+VAR ConversionRate = IF(TotalVisitors = 0, 0, DIVIDE(TotalPurchases, TotalVisitors))
+
+RETURN 
+FORMAT(ConversionRate, "0.0%") 
+--------------------------------------------------------------------------------------------------------
+Conversion Rate 2025 = 
+
+VAR TotalVisitors = CALCULATE(
+    COUNT(FACT_customer_journey[JourneyID]), 
+    FACT_customer_journey[Action] = "View",
+    YEAR('Calendar'[Date]) = 2025
+)
+VAR TotalPurchases = CALCULATE(
+    COUNT(FACT_customer_journey[JourneyID]), 
+    FACT_customer_journey[Action] = "Purchase",
+    YEAR('Calendar'[Date]) = 2025
+)
+VAR ConversionRate = IF(TotalVisitors = 0, 0, DIVIDE(TotalPurchases, TotalVisitors))
+
+RETURN 
+FORMAT(ConversionRate, "0.0%") 
+--------------------------------------------------------------------------------------------------------
+Diff Last Year Clicks = 
+VAR CurrentYear = SUM(FACT_engagement_data[Clicks])
+VAR LastYear = CALCULATE(SUM(FACT_engagement_data[Clicks]), SAMEPERIODLASTYEAR('Calendar'[Date]))
+VAR Diff =     IF(
+        ISBLANK(LastYear),
+        0,
+        CurrentYear - LastYear
+    )
+VAR _Arrow = IF(Diff > 0, UNICHAR( 129033 ) , UNICHAR( 129035 )) & " "
+RETURN
+    IF(Diff = 0, "--",_Arrow & FORMAT(ABS(Diff), "##,###"))
+--------------------------------------------------------------------------------------------------------
+Diff Last Year Conversion = 
+-- Calculate visitors and purchases for the current year
+VAR TotalVisitors_CurrentYear = CALCULATE(COUNT(FACT_customer_journey[JourneyID]), FACT_customer_journey[Action] = "View")
+VAR TotalPurchases_CurrentYear = CALCULATE(COUNT(FACT_customer_journey[JourneyID]), FACT_customer_journey[Action] = "Purchase")
+VAR CurrentYear = IF(TotalVisitors_CurrentYear = 0, 0, DIVIDE(TotalPurchases_CurrentYear, TotalVisitors_CurrentYear))
+
+-- Calculate visitors and purchases for the last year
+VAR TotalVisitors_LastYear = CALCULATE(COUNT(FACT_customer_journey[JourneyID]), FACT_customer_journey[Action] = "View", SAMEPERIODLASTYEAR('Calendar'[Date]))
+VAR TotalPurchases_LastYear = CALCULATE(COUNT(FACT_customer_journey[JourneyID]), FACT_customer_journey[Action] = "Purchase", SAMEPERIODLASTYEAR('Calendar'[Date]))
+VAR LastYear = IF(TotalVisitors_LastYear = 0 || ISBLANK(TotalVisitors_LastYear), BLANK(), DIVIDE(TotalPurchases_LastYear, TotalVisitors_LastYear))
+
+-- Calculate the difference
+VAR Diff = IF(ISBLANK(LastYear), BLANK(), CurrentYear - LastYear)
+
+-- Determine the direction of the change
+VAR _Arrow = IF(NOT ISBLANK(Diff) && Diff > 0, UNICHAR(129033), UNICHAR(129035)) & " "
+
+-- Return "--" if there's no data for LastYear, otherwise return the formatted difference
+RETURN
+    IF(
+        ISBLANK(LastYear),
+        "--",
+        _Arrow & FORMAT(ABS(Diff) * 100, "0.0") & "%"
+    )
+
+
+--------------------------------------------------------------------------------------------------------
+Diff Last Year Likes = 
+VAR CurrentYear = SUM(FACT_engagement_data[Likes])
+VAR LastYear = CALCULATE(SUM(FACT_engagement_data[Likes]), SAMEPERIODLASTYEAR('Calendar'[Date]))
+VAR Diff =     IF(
+        ISBLANK(LastYear),
+        0,
+        CurrentYear - LastYear
+    )
+VAR _Arrow = IF(Diff > 0, UNICHAR( 129033 ) , UNICHAR( 129035 )) & " "
+RETURN
+    IF(Diff = 0, "--",_Arrow & FORMAT(ABS(Diff), "##,###"))
+--------------------------------------------------------------------------------------------------------
+Diff Last Year Rating = 
+VAR Diff = [Rating Diff]
+VAR _Arrow = IF(Diff > 0.00, UNICHAR(129033), UNICHAR(129035)) & " "
+RETURN IF(Diff = 0, "--", _Arrow & FORMAT(ABS(Diff), "0.00"))
+--------------------------------------------------------------------------------------------------------
+Diff Last Year Views = 
+VAR CurrentYear = SUM(FACT_engagement_data[Views])
+VAR LastYear = CALCULATE(SUM(FACT_engagement_data[Views]), SAMEPERIODLASTYEAR('Calendar'[Date]))
+VAR Diff =     IF(
+        ISBLANK(LastYear),
+        0,
+        CurrentYear - LastYear
+    )
+VAR _Arrow = IF(Diff > 0, UNICHAR( 129033 ) , UNICHAR( 129035 )) & " "
+RETURN
+    IF(Diff = 0, "--",_Arrow & FORMAT(ABS(Diff), "##,###"))
+
+--------------------------------------------------------------------------------------------------------
+Likes = SUM( FACT_engagement_data[Likes] )
+--------------------------------------------------------------------------------------------------------
+Number of Campaigns = DISTINCTCOUNT( FACT_engagement_data[CampaignID] )
+--------------------------------------------------------------------------------------------------------
+Number of Customer Journeys = DISTINCTCOUNT( FACT_customer_journey[JourneyID] )
+--------------------------------------------------------------------------------------------------------
+Number of Customer Reviews = COUNT( FACT_customer_reviews_with_sentiment[ReviewID])
+--------------------------------------------------------------------------------------------------------
+Rating (Average) = AVERAGE(FACT_customer_reviews_with_sentiment[Rating])
+--------------------------------------------------------------------------------------------------------
+Rating Diff = 
+VAR CurrentYear = AVERAGE(FACT_customer_reviews_with_sentiment[Rating])
+VAR LastYear = CALCULATE(AVERAGE(FACT_customer_reviews_with_sentiment[Rating]), SAMEPERIODLASTYEAR('Calendar'[Date]))
+RETURN IF(ISBLANK(LastYear), 0, CurrentYear - LastYear)
+--------------------------------------------------------------------------------------------------------
+Variation Indicator Clicks = 
+VAR CurrentYear = SUM(FACT_engagement_data[Clicks])
+VAR LastYear = CALCULATE(SUM(FACT_engagement_data[Clicks]), SAMEPERIODLASTYEAR('Calendar'[Date]))
+VAR Diff =     IF(
+        ISBLANK(LastYear),
+        0,
+        CurrentYear - LastYear
+    )
+VAR _Arrow = IF(Diff > 0, UNICHAR( 129033 ) , UNICHAR( 129035 )) & " "
+RETURN
+IF( Diff >= 0, 1, 0 )
+--------------------------------------------------------------------------------------------------------
+Variation Indicator Conversion = 
+VAR TotalVisitors_CurrentYear = CALCULATE(COUNT(FACT_customer_journey[JourneyID]), FACT_customer_journey[Action] = "View")
+VAR TotalPurchases_CurrentYear = CALCULATE(COUNT(FACT_customer_journey[JourneyID]), FACT_customer_journey[Action] = "Purchase")
+VAR CurrentYear = IF(TotalVisitors_CurrentYear = 0, 0, DIVIDE(TotalPurchases_CurrentYear, TotalVisitors_CurrentYear))
+VAR TotalVisitors_LastYear = CALCULATE(COUNT(FACT_customer_journey[JourneyID]), FACT_customer_journey[Action] = "View", SAMEPERIODLASTYEAR('Calendar'[Date]))
+VAR TotalPurchases_LastYear = CALCULATE(COUNT(FACT_customer_journey[JourneyID]), FACT_customer_journey[Action] = "Purchase", SAMEPERIODLASTYEAR('Calendar'[Date]))
+VAR LastYear = IF(TotalVisitors_LastYear = 0, 0, DIVIDE(TotalPurchases_LastYear, TotalVisitors_LastYear))
+
+VAR Diff = IF(ISBLANK(LastYear), 0, CurrentYear - LastYear)
+
+VAR _Arrow = IF(Diff > 0, UNICHAR(129033), UNICHAR(129035)) & " "
+
+RETURN
+IF( Diff >= 0, 1, 0 )
+--------------------------------------------------------------------------------------------------------
+Variation Indicator Likes = 
+VAR CurrentYear = SUM(FACT_engagement_data[Likes])
+VAR LastYear = CALCULATE(SUM(FACT_engagement_data[Likes]), SAMEPERIODLASTYEAR('Calendar'[Date]))
+VAR Diff =     IF(
+        ISBLANK(LastYear),
+        0,
+        CurrentYear - LastYear
+    )
+VAR _Arrow = IF(Diff > 0, UNICHAR( 129033 ) , UNICHAR( 129035 )) & " "
+RETURN
+IF( Diff >= 0, 1, 0 )
+--------------------------------------------------------------------------------------------------------
+Variation Indicator Rating = 
+VAR Diff = [Rating Diff]
+RETURN IF(Diff > 0.00, 1, 0)
+--------------------------------------------------------------------------------------------------------
+Variation Indicator Views = 
+VAR CurrentYear = SUM(FACT_engagement_data[Views])
+VAR LastYear = CALCULATE(SUM(FACT_engagement_data[Views]), SAMEPERIODLASTYEAR('Calendar'[Date]))
+VAR Diff =     IF(
+        ISBLANK(LastYear),
+        0,
+        CurrentYear - LastYear
+    )
+VAR _Arrow = IF(Diff > 0, UNICHAR( 129033 ) , UNICHAR( 129035 )) & " "
+RETURN
+IF( Diff >= 0, 1, 0 )
+--------------------------------------------------------------------------------------------------------
+Views = SUM( FACT_engagement_data[Views])
