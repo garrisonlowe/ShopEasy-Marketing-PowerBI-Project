@@ -288,23 +288,33 @@ customer_reviews_df.to_csv(r'C:\Users\garri\OneDrive\Desktop\AW Marketing Portfo
 ## Visualize the Data
 
 First, we need to set up the data model.
+![Image](https://github.com/user-attachments/assets/718d7f59-642c-49c6-9626-a3fdcbfa4eec)
 
-![image](https://github.com/user-attachments/assets/35470c3b-e8a2-4cd6-96d6-b84b085725e3)
 
 ## Pictures of the Dashboard:
 
 Overview Screen:
-![Image](https://github.com/user-attachments/assets/550aea58-1e4a-4cb5-ae03-d39a6fbb5e0d)
+![Image](https://github.com/user-attachments/assets/39821893-a2ab-486b-a472-22dc4e31226f)
 
 Conversion Screen:
-![Image](https://github.com/user-attachments/assets/4bcd2765-1690-41b4-956c-0ef61b6aa279)
+![Image](https://github.com/user-attachments/assets/d2867b66-09aa-4d03-9476-1d41dca93527)
 
 Social Media Screen:
-![Image](https://github.com/user-attachments/assets/38f8aaed-df50-4cea-aa54-e0b33a33021e)
-
+![Image](https://github.com/user-attachments/assets/69d119c0-c53d-4ae3-a934-387aafcac5d2)
 
 Customer Reviews Screen:
-![Image](https://github.com/user-attachments/assets/9c253044-5956-40d5-aaae-8245dda57c20)
+![Image](https://github.com/user-attachments/assets/8e410d8d-fda6-409c-a7fe-b9e29473d0d3)
+
+
+
+
+
+
+
+
+
+
+
 
 
 All measures and backgrounds will be in the repo files..
